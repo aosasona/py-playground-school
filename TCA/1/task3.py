@@ -67,8 +67,14 @@ def sentencesContaining(token: str, data: str) -> list:
     Return a list of sentences containing the token.
     """
     sentences = breakIntoSentences(data)
-    sentences = [sentence for sentence in sentences if token.lower() in sentence.lower()]
-    return sentences
+    sentences_containing_token = []
+    for sentence in sentences:
+        current_sentence_tokens = breakIntoTokens(sentence.lower())
+        for current_sentence_token in current_sentence_tokens:
+            if current_sentence_token == token.lower():
+                sentences_containing_token.append(sentence)
+                break
+    return sentences_containing_token
 
 
 def main():
@@ -83,6 +89,8 @@ def main():
         split_data = breakIntoTokens(data)
         num_token = countToken(token, split_data)
         print(f">> The number of times the token '{token}' appears in the file is: {num_token}")
+        sentences_containing_token = sentencesContaining(token, data)
+        print(f">> The number of sentences containing the token '{token}' are: {len(sentences_containing_token)}")
         normalised_frequency = normalisedFrequency(token, split_data)
         print(f">> The normalised frequency of the token '{token}' is: {normalised_frequency}")
     except FileNotFoundError:
